@@ -1,9 +1,17 @@
-while True:
- User_input = input(" Enter your text here: ")
-
- if User_input.lower == 'stop' :
-  print("Exit the user")
-  break
- 
-output = User_input.split()
-print(len(output))
+import requests
+import random
+def generate_random_name(country, gender):
+    gender = input("Enter Gender:  ")
+    country = input(" Enter Country:  ")
+url = f"https://api.namsor.com/onomastics/api/json/{gender}/{country}/"
+response = requests.get(url)
+if response.status_code == 200:
+    name = response.json()
+    if name:
+        return random.choice(name)
+    else
+        return 'no name found'
+    else
+       return 'failed to load from api'
+random_name = generate_random_name()
+print(random_name)
