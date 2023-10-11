@@ -1,0 +1,9 @@
+while True:
+ User_input = input(" Enter your text here: ")
+
+ if User_input.lower == 'stop' :
+  print("Exit the user")
+  break
+ 
+output = User_input.split()
+print(len(output))
