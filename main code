@@ -1,17 +1,60 @@
 import requests
-import random
-def generate_random_name(country, gender):
-    gender = input("Enter Gender:  ")
-    country = input(" Enter Country:  ")
-url = f"https://api.namsor.com/onomastics/api/json/{gender}/{country}/"
-response = requests.get(url)
-if response.status_code == 200:
-    name = response.json()
-    if name:
-        return random.choice(name)
-    else
-        return 'no name found'
-    else
-       return 'failed to load from api'
-random_name = generate_random_name()
-print(random_name)
+
+def generate_random_names(quantity, country, gender):
+    url = f'https://randomuser.me/api/?results={quantity}&nat={country}&gender={gender}'
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        if 'results' in data and len(data['results']) > 0:
+            names = []
+            for result in data['results']:
+                name_data = result['name']
+                first_name = name_data['first'].capitalize()
+                last_name = name_data['last'].capitalize()
+                names.append(f"{first_name} {last_name}")
+            return names
+        else:
+            return ['No names found.']
+    else:
+        return ['Failed to load from the API.']
+
+# Prompt the user to enter the country for the names
+country = input("Enter the two-letter country code for the names (e.g., 'US' for United States): ")
+
+# Prompt the user to enter the gender for the names
+gender = input("Enter the gender for the names ('male' or 'female'): ")
+
+print("\n*** Random Name Generator ***\n")
+
+while True:
+    # Prompt the user to enter the quantity of random names
+    quantity = input("Enter the number of random names you want to generate (or 'stop' to quit): ")
+    
+    if quantity.lower() == 'stop':
+        break
+    
+    try:
+        quantity = int(quantity)
+        
+        # Generate random names
+        random_names = generate_random_names(quantity, country, gender)
+        
+        if random_names[0] == 'No names found.':
+            print(random_names[0])
+        elif random_names[0] == 'Failed to load from the API.':
+            print(random_names[0])
+        else:
+            # Print the generated names
+            print("\nGenerated Names:")
+            print("----------------")
+            for i, name in enumerate(random_names, start=1):
+                print(f"{i}. {name}")
+            print("----------------")
+    
+    except ValueError:
+        print("Invalid input. Please enter a number or 'stop'.")
+    
+    print()
+
+print("\nThank you for using the Random Name Generator. Goodbye!")
